@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>index</title>
+    <style>
+        body{
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+    width: 100%;
+    
+}
+fieldset{
+    display: inline-block;
+   
+    box-shadow:1px 1px 1px rgb(32, 31, 31),
+    1px 1px 1px rgb(46, 44, 44),
+    2px 2px 5px rgb(43, 42, 42),
+     3px 2px 1px rgb(60, 58, 58),
+     inset 1px 1px 2px #fff;
+    outline: none;
+    border: none;
+    transition:0.5s;
+}
+form{
+    
+}
+legend{
+    text-align: center;
+    font-size: 15px;
+    background-color: white;
+}
+label{
+    font-size: 22px;
+}
+input{
+    color:#555;
+    background: linear-gradient(#dbdae1,#a3aaba);
+    box-shadow:1px 1px 1px rgb(32, 31, 31),
+    1px 1px 1px rgb(46, 44, 44),
+    2px 2px 5px rgb(43, 42, 42),
+     3px 2px 1px rgb(60, 58, 58),
+     inset 1px 1px 2px #fff;
+     outline:none;
+     border:none;
+     padding:5px 10px;
+     font-size:19px;
+}
+.radio{
+    background: transparent;
+    box-shadow: none;
+}
+#sub{
+    text-align: center;
+    background-color: rgb(237, 88, 237);
+    padding: 2px;
+    margin:5px;
+    display: flex;
+    justify-content: center;
+    color:white;
+    transition: 0.3s;
+}
+#sub:hover{
+    background-color: rgb(47, 243, 178);
+}
+#res{
+    text-align: center;
+    background-color: rgb(47, 243, 178);
+    padding: 2px;
+    margin:5px;
+    display: flex;
+    justify-content: center;
+    color:white;
+    transition: 0.3s;
+}
+#res:hover{
+    background-color: rgb(237, 88, 237);
+}
+p{
+    color: rgb(40, 38, 38);
+}
+
+    </style>
+</head>
+<body>
+    <form action="">
+        <fieldset>
+            <legend>STATS</legend>
+            <label for="">VALUES</label><br>
+            <input type="text" id="values" value=""><br><br>
+            <label for="">FREQUENCIES</label><br>
+            <input type="text" id="frequencies"><br><br> 
+            <fieldset>
+                <legend >ENTER WHAT TO CALCULATE</legend>
+                <label for="">MEAN</label>
+                <input type="radio" name="what" value="mean" class="radio">
+                <LAbel>MEDIAN</LAbel>
+                <input type="radio" name="what" value="median" class="radio">
+                <Label>MOD</Label>
+                <input type="radio" name="what" value="mod" class="radio">
+                <br>
+                
+                <span id="sub" onclick="">SUBMIT</span>
+                <span id="res" onclick="reset()">RESET</span>
+
+                       </fieldset>
+                <p id="f_sum"></p>
+                <p id="cf_sum"></p>
+                <p id="result"></p>
+
+
+
+        </fieldset>
+    </form>
+    <script>
+        document.getElementById('sub').addEventListener('click', function() {
+    var x=document.getElementById("values").value;
+    var f=document.getElementById("frequencies").value;
+    if(f!=undefined && x!=undefined){
+         var xstr=x.split(" ");
+         var fstr=f.split(" ");
+         if(xstr.length===fstr.length){
+        var xarr=[]
+        var farr=[]
+        var cf=[]
+        let num=0;
+        let median=0;
+        
+        for(var i=0;i<xstr.length;i++)
+        {
+            xarr.push(parseInt(xstr[i]))
+            farr.push(parseInt(fstr[i]))
+            cf.push(parseInt(fstr[i])+num)
+            num+=parseInt(fstr[i])
+        }
+        let max_f=farr[0];
+        var sum_xf=sun_xf(xarr,farr)
+        var n=sum(farr);
+        for(i=0;i<cf.length;i++)
+        {
+            if(parseInt((n+1)/2)>cf[i] && parseInt((n+1)/2)<=cf[i+1])
+            {
+                median=xarr[i+1];
+            }
+            if(farr[i]>max_f)
+            {
+                max_f=farr[i];
+            }
+
+
+                        
+        }
+        var mean=sum_xf/n;
+        document.getElementById("f_sum").innerHTML="SUM OF FREOQUENCIES ARE:"+n;
+        document.getElementById("cf_sum").innerHTML="CF SERIES IS:"+cf;
+
+        var ele=document.getElementsByName("what");
+        
+            if(ele[0].checked)
+            {
+                document.getElementById("result").innerHTML="MEAN IS:"+
+                mean;
+                
+            }
+            else if(ele[1].checked)
+            {
+                document.getElementById("result").innerHTML="MDIAN IS:"+
+                median;
+                
+                
+            }
+            if(ele[2].checked)
+            {
+                document.getElementById("result").innerHTML="MOD IS:"+
+                max_f;
+                
+            }
+
+
+
+        
+    }
+else 
+{
+    alert("X AND F VALUES ARE NOT SAME");
+}}
+
+  });
+  function sun_xf(xarr,farr){
+    let sm=0;
+    for(var i=0;i<xarr.length;i++){
+        sm+=xarr[i]*farr[i];
+    }
+    return sm
+}
+ function sum(arr){
+    let s=0;
+    for(var j=0;j<arr.length;j++){
+        s+=arr[j];
+
+    }
+    return s;
+ }
+ function cf(farr){
+    
+ }
+ function count(arr,ele){
+    let cn=0;
+    for(let j=0;j<arr.length;j++)
+    {
+        if(arr[j]==ele){
+            cn+=1
+        }
+
+    }
+    return cn;
+
+ }
+ function reset()
+ {
+    document.getElementById("values").value="";
+    document.getElementById("frequencies").value="";
+    document.getElementById("result").innerHTML="";
+    document.getElementById("cf_sum").innerHTML="";
+    document.getElementById("f_sum").innerHTML="";
+    ele=document.getElementsByName("what");
+    for(i=0;ele.length;i++)
+    {
+        if(ele[i].checked){
+            ele[i].checked=false;
+        }
+    }
+ }
+    </script>
+</body>
+</html>
